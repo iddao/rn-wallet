@@ -1,18 +1,21 @@
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { NativeBaseProvider } from "native-base";
 
-import useCachedResources from "./hooks/useCachedResources";
+import { StoreProvider } from "easy-peasy";
+import { store } from "./stores";
+
+import React from "react";
+
 import RootNavigation from "./screens";
+import { Initializer } from "./components/ui/Initializer";
 
 export function AppRoot() {
-  const isLoadingComplete = useCachedResources();
-
-  if (!isLoadingComplete) {
-    return null;
-  } else {
-    return (
-      <SafeAreaProvider>
-        <RootNavigation />
-      </SafeAreaProvider>
-    );
-  }
+  return (
+    <NativeBaseProvider>
+      <StoreProvider store={store}>
+        <Initializer>
+          <RootNavigation />
+        </Initializer>
+      </StoreProvider>
+    </NativeBaseProvider>
+  );
 }
