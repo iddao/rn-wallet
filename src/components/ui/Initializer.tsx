@@ -1,13 +1,9 @@
-import { useStoreActions, useStoreState } from "../../stores";
-import React, { ReactNode, useEffect } from "react";
+import React, { ReactNode } from "react";
 import { Center, Skeleton, VStack } from "native-base";
+import { useStoreRehydrated } from "easy-peasy";
 
 export function Initializer({ children }: { children: ReactNode }) {
-  const initialized = useStoreState((state) => state.initialized);
-  const initialize = useStoreActions((actions) => actions.initialize);
-  useEffect(() => {
-    initialize();
-  }, []); // never do inits twice, even if variable is changed
+  const initialized = useStoreRehydrated();
 
   if (!initialized) {
     return (

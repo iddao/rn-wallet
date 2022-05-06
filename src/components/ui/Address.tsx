@@ -3,7 +3,7 @@ import { HStack, Text } from "native-base";
 type Props = {
   children: string;
 };
-export function Address({ children }: Props) {
+export default function Address({ children }: Props) {
   // remove 0x prefix
   const address = children.replace("0x", "");
 

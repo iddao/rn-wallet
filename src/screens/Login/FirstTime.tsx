@@ -2,7 +2,17 @@ import { Box, Button, Icon, Stack, Text, VStack, ZStack } from "native-base";
 import { MaterialIcons } from "@native-base/icons";
 import React, { ReactNode, useEffect, useRef } from "react";
 import { Animated, Easing } from "react-native";
+import { useStoreActions, useStoreState } from "../../stores";
 export default function FirstTime() {
+  const nfcManager = useStoreState((s) => s.nfcManager);
+  const setPublicKey = useStoreActions((s) => s.pubkey.setPublicKey);
+
+  const connect = async () => {
+    const result = await nfcManager.getPublicKey();
+    if (result) {
+      setPublicKey(result);
+    }
+  };
   return (
     <VStack alignItems="center" justifyContent="space-between" height="100%">
       <VStack alignItems="center" justifyContent="center" margin={16}>
@@ -23,7 +33,7 @@ export default function FirstTime() {
           application
         </Text>
         <Box padding={2} flexDirection="row">
-          <Button size="lg" flexGrow={1}>
+          <Button size="lg" flexGrow={1} onPress={connect}>
             Connect
           </Button>
         </Box>

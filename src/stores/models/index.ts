@@ -1,26 +1,25 @@
-import { action, Action, thunk, Thunk } from "easy-peasy";
-import { PublicKey } from "../../core/PublicKey";
+import { model as settings } from "./settings";
+import { model as pubkey } from "./pubkey";
+import { RpcManager } from "../../core/RpcManager";
+import { Computed, computed } from "easy-peasy";
+import { NfcManager } from "../../core/NfcManager";
 export type Model = {
-  initialized: boolean;
-  setInitialized: Action<Model, void>;
-  publicKey: PublicKey | null;
-  initialize: Thunk<Model, void>;
+  settings: typeof settings;
+  pubkey: typeof pubkey;
+
+  rpcManager: Computed<Model, RpcManager | null, Model>;
+  nfcManager: NfcManager;
 };
 
 export const model: Model = {
-  initialized: false,
-  setInitialized: action((state) => {
-    return {
-      ...state,
-      initialized: true,
-    };
+  settings,
+  pubkey,
+
+  rpcManager: computed([(state) => state.pubkey.publicKey], (publicKey) => {
+    if (publicKey) {
+      return RpcManager.initOnce(publicKey);
+    }
+    return null;
   }),
-  publicKey: {
-    n: "deadbee",
-    e: "65537",
-  },
-  initialize: thunk(async (actions) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    actions.setInitialized();
-  }),
+  nfcManager: new NfcManager(),
 };
