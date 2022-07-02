@@ -15,6 +15,7 @@ export function AppRoot() {
       <StoreProvider store={store}>
         <Initializer>
           <NfcAdapter />
+
           <RootNavigation />
         </Initializer>
       </StoreProvider>

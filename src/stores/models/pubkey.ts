@@ -2,7 +2,7 @@ import { action, Action, computed } from "easy-peasy";
 import { PublicKey } from "../../core/PublicKey";
 import persist from "../persist";
 
-export type Model = {
+type Model = {
   publicKey: PublicKey | null;
   setPublicKey: Action<Model, PublicKey | null>;
 };

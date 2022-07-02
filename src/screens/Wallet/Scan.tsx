@@ -5,19 +5,26 @@ import { BarCodeEvent, BarCodeScanner } from "expo-barcode-scanner";
 import { StyleSheet } from "react-native";
 import Header from "../../components/ui/Header";
 import { useNavigation } from "@react-navigation/native";
-import { RpcManager } from "../../core/RpcManager";
+import { useStoreActions } from "../../stores";
 
 export default function Scan() {
   const navigation = useNavigation();
+  const connectWc = useStoreActions((s) => s.rpc.connectWc);
   const onScan = ({ data }: BarCodeEvent) => {
     navigation.goBack();
 
     if (data.startsWith("wc:")) {
-      RpcManager!.instance?.connectWc(data);
+      connectWc(data);
     } else {
       console.log("unknown scan data", data);
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+    })();
+  }, []);
   return (
     <ZStack flexGrow={1}>
       <Box backgroundColor="black" size="100%">
@@ -36,8 +43,7 @@ export default function Scan() {
 
 const styles = StyleSheet.create({
   scanView: {
-    height: "100%",
     width: "100%",
-    backgroundColor: "#000",
+    height: "100%",
   },
 });

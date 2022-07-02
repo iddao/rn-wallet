@@ -1,31 +1,26 @@
 import { useEffect, useState } from "react";
+import { EVENTS, NfcModalType } from "../../core/NfcManager";
 import { useStoreState } from "../../stores";
 import { ModalTemplate } from "../modalViews/ModalTemplate";
 
 export default function NfcAdapter() {
   const nfcManager = useStoreState((s) => s.nfcManager);
-  const [hdl, setHdl] = useState<any>(null);
+  const [params, setParams] = useState<NfcModalType | null>(null);
   useEffect(() => {
-    const { remove } = nfcManager.addListener("readRequest", (event: any) => {
-      setHdl(event);
-    });
+    const { remove } = nfcManager.adapter.addListener(
+      EVENTS.nfcRequested,
+      (params: NfcModalType) => {
+        setParams(params);
+      }
+    );
     return remove;
   }, [nfcManager]);
   return (
     <>
       <ModalTemplate
         title="NFC"
-        isOpen={!!hdl}
-        onClose={() => {
-          setHdl(null);
-        }}
-        onContinue={function (): void {
-          setHdl(null);
-          hdl.accept({
-            n: "0x03",
-            e: "0x010000",
-          });
-        }}
+        isOpen={!!params}
+        onClose={() => nfcManager.adapter.emit(EVENTS.requestCancel)}
       >
         Please touch your NFC card.
       </ModalTemplate>

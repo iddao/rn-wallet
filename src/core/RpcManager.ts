@@ -3,7 +3,14 @@ import WalletConnect from "@walletconnect/client";
 import { PublicKey } from "./PublicKey";
 import { providers } from "ethers";
 import { MynaWalletFactory__factory } from "../typechain/factories/MynaWalletFactory__factory";
-export class RpcManager extends EventEmitter {
+import { ISessionParams } from "@walletconnect/types";
+export type SessReqParam = {
+  id: number;
+  jsonrpc: "2.0";
+  method: string;
+  params: [ISessionParams];
+};
+export class RpcManager {
   static instance: RpcManager | null = null;
   static instanceArg: PublicKey | null = null;
 
@@ -17,8 +24,15 @@ export class RpcManager extends EventEmitter {
     }
   }
 
+  adapter: EventEmitter;
+
   private constructor(private publicKey: PublicKey) {
-    super();
+    this.adapter = this.initEvent();
+  }
+
+  private initEvent(): EventEmitter {
+    const adapter = new EventEmitter();
+    return adapter;
   }
 
   private async _getAddress(): Promise<string> {
@@ -49,31 +63,36 @@ export class RpcManager extends EventEmitter {
 
   wcInstance: WalletConnect | undefined;
   connectWc(uri: string) {
-    const wcInstance = new WalletConnect({
-      uri,
-      clientMeta: {
-        name: "MynaConnect",
-        description: "MynaConnect",
-        url: "https://aoki.app",
-        icons: ["https://aoki.app/icon.png"],
-      },
-    });
-    wcInstance.on("session_request", (error, payload) => {
-      if (error) {
-        throw error;
-      }
-      this.emit("wcSessRequest", {
-        params: payload.params[0],
-        approve: async () => {
-          wcInstance.approveSession({
-            accounts: [await this.getAddress()],
-            chainId: 1,
-          });
-        },
-        reject: () => {
-          wcInstance.rejectSession();
+    return new Promise<SessReqParam>((resolve, reject) => {
+      const wcInstance = new WalletConnect({
+        uri,
+        clientMeta: {
+          name: "MynaConnect",
+          description: "MynaConnect",
+          url: "https://aoki.app",
+          icons: ["https://aoki.app/icon.png"],
         },
       });
+      const handler = (error: any, payload: SessReqParam) => {
+        if (error) {
+          throw error;
+        }
+        this.wcInstance = wcInstance;
+        wcInstance.off("session_request");
+        resolve(payload);
+      };
+      wcInstance.on("session_request", handler);
+    });
+  }
+  async approveSession() {
+    this.wcInstance!.approveSession({
+      accounts: [await this.getAddress()],
+      chainId: 592,
+    });
+  }
+  async rejectSession() {
+    this.wcInstance!.rejectSession({
+      message: "User rejected session",
     });
   }
 }

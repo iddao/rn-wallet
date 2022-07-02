@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 type ModalTemplateProps = {
   isOpen: boolean;
   onClose: () => void;
-  onContinue: () => void;
+  onContinue?: () => void;
   title: string;
   children: React.ReactNode;
 };
@@ -21,9 +21,11 @@ export function ModalTemplate({
         <Modal.CloseButton />
         <Modal.Header>{title}</Modal.Header>
         <Modal.Body>{children}</Modal.Body>
-        <Modal.Footer>
-          <Button onPress={onContinue}>Continue</Button>
-        </Modal.Footer>
+        {onContinue && (
+          <Modal.Footer>
+            <Button onPress={onContinue}>Continue</Button>
+          </Modal.Footer>
+        )}
       </Modal.Content>
     </Modal>
   );
