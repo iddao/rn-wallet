@@ -1,9 +1,10 @@
 import React, { ReactNode } from "react";
 import { Center, Skeleton, VStack } from "native-base";
-import { useStoreRehydrated } from "easy-peasy";
+import { initializedState } from "../../stores";
+import { useRecoilValue } from "recoil";
 
 export function Initializer({ children }: { children: ReactNode }) {
-  const initialized = useStoreRehydrated();
+  const initialized = useRecoilValue(initializedState);
 
   if (!initialized) {
     return (

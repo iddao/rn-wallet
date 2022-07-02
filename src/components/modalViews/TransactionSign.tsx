@@ -5,26 +5,46 @@ import { Address } from "../ui/Address";
 import { GasInput, GasParameter } from "../ui/GasInput";
 import { BigNumber } from "bignumber.js";
 import { useState } from "react";
+import { useAddress } from "../../hooks/useAddress";
 
-export function TransactionSign() {
+type Props = {
+  from?: string;
+  to: string;
+  data: string;
+  gasLimit: string;
+  value: string;
+  onClose: () => void;
+  onContinue: (_: GasParameter) => void;
+};
+
+export function TransactionSign({
+  from,
+  to,
+  data,
+  gasLimit,
+  value,
+  onClose,
+  onContinue,
+}: Props) {
   const [gasParam, setGasParam] = useState<GasParameter>({
     maxFeePerGas: new BigNumber("81747976828"),
     maxPriorityFeePerGas: new BigNumber("1500000000"),
-    gasLimit: new BigNumber("21000"),
+    gasLimit: new BigNumber(gasLimit),
     gasPrice: new BigNumber("81747976828"),
   });
+  const myAddress = from ?? useAddress();
   return (
     <ModalTemplate
       isOpen={true}
-      onClose={() => {}}
-      onContinue={() => {}}
+      onClose={onClose}
+      onContinue={() => onContinue(gasParam)}
       title="Sign Transaction"
     >
       <VStack>
         <HStack alignItems="center" justifyContent="space-between" space={1}>
-          <Address>0xc7B6F844BC714E63C1CECFb639DaD54D55C40446</Address>
+          <Address>{myAddress}</Address>
           <Icon as={MaterialCommunityIcons} name="arrow-right" size={5} />
-          <Address>0xc7B6F844BC714E63C1CECFb639DaD54D55C40446</Address>
+          <Address>{to}</Address>
         </HStack>
         <HStack
           alignItems="center"
@@ -40,14 +60,12 @@ export function TransactionSign() {
         </HStack>
         <HStack alignItems="center" justifyContent="space-between" space={1}>
           <Text>Value</Text>
-          <Text>0.00</Text>
+          <Text>{new BigNumber(value).shiftedBy(-18).toFixed()}</Text>
         </HStack>
         <VStack>
           <Text>Data</Text>
           <ScrollView h="10" _contentContainerStyle={{ flexGrow: 1 }}>
-            <Text>
-              60606040526000600260146101000a815481602028302160208701359181151560730600160a060020a033316600090815260016020526040812054600160a060020a03033316600090815260016020526040902054600160a060020a0316333016060604052336060908152602090f35b6060908152602090f35b6060908152602090f35b
-            </Text>
+            <Text>{data}</Text>
           </ScrollView>
         </VStack>
       </VStack>

@@ -1,10 +1,7 @@
 import { NativeBaseProvider } from "native-base";
 
-import { StoreProvider } from "easy-peasy";
-import { store } from "./stores";
-
 import React from "react";
-
+import { RecoilRoot } from "recoil";
 import RootNavigation from "./screens";
 import { Initializer } from "./components/ui/Initializer";
 import NfcAdapter from "./components/adapters/NfcAdapter";
@@ -12,13 +9,15 @@ import NfcAdapter from "./components/adapters/NfcAdapter";
 export function AppRoot() {
   return (
     <NativeBaseProvider>
-      <StoreProvider store={store}>
-        <Initializer>
-          <NfcAdapter />
+      <RecoilRoot>
+        <React.Suspense fallback={<div>Loading...</div>}>
+          <Initializer>
+            <NfcAdapter />
 
-          <RootNavigation />
-        </Initializer>
-      </StoreProvider>
+            <RootNavigation />
+          </Initializer>
+        </React.Suspense>
+      </RecoilRoot>
     </NativeBaseProvider>
   );
 }

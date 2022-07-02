@@ -1,16 +1,12 @@
 import Clipboard from "@react-native-clipboard/clipboard";
 import { Box, Button, VStack } from "native-base";
 import React from "react";
-import QRCode from "react-native-qrcode-svg";
-import Address from "../../components/ui/Address";
 import Header from "../../components/ui/Header";
-import { useAddress } from "../../hooks/useAddress";
-import { useStoreActions } from "../../stores";
+import { useSetRecoilState } from "recoil";
+import { pubkeyState } from "../../stores/pubkey";
 
 export default function Settings() {
-  const setPublicKey = useStoreActions(
-    (actions) => actions.pubkey.setPublicKey
-  );
+  const setPublicKey = useSetRecoilState(pubkeyState);
   const logout = () => {
     setPublicKey(null);
   };

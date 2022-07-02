@@ -4,7 +4,7 @@ import {
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import { useStoreState } from "../stores";
+import { usePubkey } from "../stores/pubkey";
 import Login from "./Login";
 import Wallet, { WalletStackParamList } from "./Wallet";
 
@@ -16,7 +16,7 @@ export type RootStackParamList = {
 export const RootStack = createNativeStackNavigator();
 
 export default function RootNavigation() {
-  const isLoggedIn = !!useStoreState((state) => state.pubkey.publicKey); // TODO: Replace with logic(local state, redux, or others) to determine if user is logged in
+  const isLoggedIn = !!usePubkey(); // TODO: Replace with logic(local state, redux, or others) to determine if user is logged in
 
   return (
     <NavigationContainer>

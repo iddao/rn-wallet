@@ -8,15 +8,16 @@ import {
   IconButton,
 } from "native-base";
 import { MaterialCommunityIcons } from "@native-base/icons";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../../components/ui/Header";
 import TokenItem from "../../components/ui/TokenItem";
-import Address from "../../components/ui/Address";
+import { Address } from "../../components/ui/Address";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { WalletStackParamList } from ".";
-import { useStoreState } from "../../stores";
 import { useAddress } from "../../hooks/useAddress";
+import { useRecoilValue } from "recoil";
+import { assetInfoState } from "../../stores/assets";
 
 export default function Home() {
   const navigation =
@@ -32,23 +33,9 @@ export default function Home() {
   const goToSettings = () => {
     navigation.push("Settings");
   };
-  const tokens = useRef<any[]>([
-    {
-      name: "Astar",
-      symbol: "ASTR",
-      balance: "300.512",
-      iconUri: "https://astar.network/images/favicon/apple-touch-icon.png",
-      assetId: "ASTR",
-    },
-    {
-      name: "JPY Coin",
-      symbol: "JPYC",
-      balance: "10000",
-      iconUri: "https://jpyc.jp/static/media/jpyc2.545c73cd.png",
-      assetId: "JPYC",
-    },
-  ]);
+  const tokens = useRecoilValue(assetInfoState);
   const myAddress = useAddress();
+
   return (
     <>
       <Header
@@ -70,7 +57,7 @@ export default function Home() {
       <VStack alignItems="center" flexGrow={1}>
         <VStack alignItems="center" p={4}>
           <HStack space={1} alignItems="center" m={2}>
-            <Text fontSize="3xl">121.5</Text>
+            <Text fontSize="3xl">123.4</Text>
             <Text fontSize="xl">USD</Text>
           </HStack>
           <Pressable
@@ -88,16 +75,18 @@ export default function Home() {
           </Pressable>
         </VStack>
         <VStack w="100%">
-          {tokens.current.map((token: any) => (
+          {tokens.map((token) => (
             <TokenItem
-              key={token.assetId}
+              key={token.chain.id + token.address + token.assetType}
               name={token.name}
               symbol={token.symbol}
-              balance={token.balance}
-              iconUri={token.iconUri}
+              balance={token.balanceDecimal}
+              iconUri={token.icon ?? ""}
               onPress={() => {
                 navigation.navigate("TokenDetail", {
-                  assetId: token.assetId,
+                  chainId: token.chain.id,
+                  address: token.address,
+                  assetType: token.assetType,
                 });
               }}
             />

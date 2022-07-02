@@ -5,16 +5,21 @@ import { BarCodeEvent, BarCodeScanner } from "expo-barcode-scanner";
 import { StyleSheet } from "react-native";
 import Header from "../../components/ui/Header";
 import { useNavigation } from "@react-navigation/native";
-import { useStoreActions } from "../../stores";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { WalletStackParamList } from ".";
 
 export default function Scan() {
-  const navigation = useNavigation();
-  const connectWc = useStoreActions((s) => s.rpc.connectWc);
+  const navigation =
+    useNavigation<
+      NativeStackScreenProps<WalletStackParamList, "Scan">["navigation"]
+    >();
   const onScan = ({ data }: BarCodeEvent) => {
     navigation.goBack();
 
     if (data.startsWith("wc:")) {
-      connectWc(data);
+      navigation.navigate("WcRequest", {
+        uri: data,
+      });
     } else {
       console.log("unknown scan data", data);
     }

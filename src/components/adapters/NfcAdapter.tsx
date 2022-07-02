@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
 import { EVENTS, NfcModalType } from "../../core/NfcManager";
-import { useStoreState } from "../../stores";
+import { nfcManagerHoldState } from "../../stores/nfc";
 import { ModalTemplate } from "../modalViews/ModalTemplate";
 
 export default function NfcAdapter() {
-  const nfcManager = useStoreState((s) => s.nfcManager);
+  const nfcManager = useRecoilValue(nfcManagerHoldState)!;
   const [params, setParams] = useState<NfcModalType | null>(null);
   useEffect(() => {
     const { remove } = nfcManager.adapter.addListener(

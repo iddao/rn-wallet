@@ -2,7 +2,7 @@ import Clipboard from "@react-native-clipboard/clipboard";
 import { Box, Button, VStack } from "native-base";
 import React from "react";
 import QRCode from "react-native-qrcode-svg";
-import Address from "../../components/ui/Address";
+import { Address } from "../../components/ui/Address";
 import Header from "../../components/ui/Header";
 import { useAddress } from "../../hooks/useAddress";
 

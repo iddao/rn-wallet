@@ -1,4 +1,9 @@
-export type PublicKey = {
-  n: string; // 0x padded hex string
-  e: string; // 0x padded hex string
-};
+export class PublicKey {
+  constructor(private _n: string, private _e: string) {}
+  get n() {
+    return this._n;
+  }
+  get e() {
+    return this._e;
+  }
+}

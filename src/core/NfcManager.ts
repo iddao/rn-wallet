@@ -1,11 +1,30 @@
 import { EventEmitter } from "fbemitter";
+import { useMemo } from "react";
 import { PublicKey } from "./PublicKey";
 
 export class NfcManager {
   adapter: EventEmitter;
-  constructor() {
+  private constructor() {
     this.adapter = this.initEvent();
   }
+
+  static instance: NfcManager | null = null;
+
+  static async initOnce(): Promise<NfcManager> {
+    if (NfcManager.instance) {
+      return NfcManager.instance;
+    } else {
+      NfcManager.instance = await NfcManager.init();
+      return NfcManager.instance;
+    }
+  }
+  static async init(): Promise<NfcManager> {
+    const instance = new NfcManager();
+    await instance._init();
+    return instance;
+  }
+
+  private async _init() {}
 
   private initEvent(): EventEmitter {
     const adapter = new EventEmitter();
@@ -20,12 +39,9 @@ export class NfcManager {
       type: "getCert",
     });
     // wait 3 sec
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    await new Promise((resolve) => setTimeout(resolve, 300));
     this.hideUi();
-    return {
-      n: "0x03",
-      e: "0x010001",
-    };
+    return new PublicKey("0x03", "0x010001");
   }
   showUi(data: NfcModalType) {
     this.adapter.emit(EVENTS.nfcRequested, data);

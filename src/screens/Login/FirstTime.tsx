@@ -1,11 +1,13 @@
-import { Box, Button, Icon, Stack, Text, VStack, ZStack } from "native-base";
+import { Box, Button, Icon, Text, VStack, ZStack } from "native-base";
 import { MaterialIcons } from "@native-base/icons";
 import React, { ReactNode, useEffect, useRef } from "react";
 import { Animated, Easing } from "react-native";
-import { useStoreActions, useStoreState } from "../../stores";
+import { pubkeyState } from "../../stores/pubkey";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { nfcManagerHoldState } from "../../stores/nfc";
 export default function FirstTime() {
-  const nfcManager = useStoreState((s) => s.nfcManager);
-  const setPublicKey = useStoreActions((s) => s.pubkey.setPublicKey);
+  const nfcManager = useRecoilValue(nfcManagerHoldState)!;
+  const setPublicKey = useSetRecoilState(pubkeyState);
 
   const connect = async () => {
     const result = await nfcManager.getPublicKey();
