@@ -1,5 +1,6 @@
 import WalletConnect from "@walletconnect/client";
 import { ISessionParams } from "@walletconnect/types";
+import { defaultChainId } from "../constants/data";
 export type SessReqParam = {
   id: number;
   jsonrpc: "2.0";
@@ -38,7 +39,7 @@ export class WcRequestContext {
   accept(accounts: string[]) {
     this.wc!.approveSession({
       accounts: accounts,
-      chainId: 137,
+      chainId: Number(defaultChainId),
     });
 
     return this.wc!;

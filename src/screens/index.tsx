@@ -4,6 +4,7 @@ import {
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
+import WcAdapter from "../components/adapters/WcAdapter";
 import { usePubkey } from "../stores/pubkey";
 import Login from "./Login";
 import Wallet, { WalletStackParamList } from "./Wallet";

@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import WcAdapter from "../../components/adapters/WcAdapter";
 import { AssetIdentifier, AssetType } from "../../types/blockchain";
 import Home from "./Home";
 import Receive from "./Receive";
@@ -21,6 +22,7 @@ export const WalletStack = createNativeStackNavigator<WalletStackParamList>();
 export default function Wallet() {
   return (
     <>
+      <WcAdapter />
       <WalletStack.Navigator
         screenOptions={{
           headerShown: false,

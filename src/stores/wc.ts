@@ -5,4 +5,5 @@ import { WcRequestContext } from "../core/WcRequestContext";
 export const activeSessionState = atom<WalletConnect | null>({
   key: "activeSession",
   default: null,
+  dangerouslyAllowMutability: true,
 });

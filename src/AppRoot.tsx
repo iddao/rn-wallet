@@ -1,4 +1,4 @@
-import { NativeBaseProvider } from "native-base";
+import { NativeBaseProvider, Text } from "native-base";
 
 import React from "react";
 import { RecoilRoot } from "recoil";
@@ -10,7 +10,7 @@ export function AppRoot() {
   return (
     <NativeBaseProvider>
       <RecoilRoot>
-        <React.Suspense fallback={<div>Loading...</div>}>
+        <React.Suspense fallback={<Text>Loading...</Text>}>
           <Initializer>
             <NfcAdapter />
 

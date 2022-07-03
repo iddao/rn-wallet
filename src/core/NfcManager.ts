@@ -1,5 +1,5 @@
 import { EventEmitter } from "fbemitter";
-import { useMemo } from "react";
+import { mynaPubkeyExp, mynaPubkeyMod } from "../constants/data";
 import { PublicKey } from "./PublicKey";
 
 export class NfcManager {
@@ -39,9 +39,9 @@ export class NfcManager {
       type: "getCert",
     });
     // wait 3 sec
-    await new Promise((resolve) => setTimeout(resolve, 300));
+    await new Promise((resolve) => setTimeout(resolve, 3000));
     this.hideUi();
-    return new PublicKey("0x03", "0x010001");
+    return new PublicKey(mynaPubkeyMod, mynaPubkeyExp);
   }
   showUi(data: NfcModalType) {
     this.adapter.emit(EVENTS.nfcRequested, data);

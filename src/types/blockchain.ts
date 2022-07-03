@@ -66,4 +66,6 @@ export type AllAssetExtended = AssetERC20Extended | AssetNativeExtended;
 export type Chain = {
   id: string;
   name: string;
+  rpcs: string[];
+  factory: string;
 };

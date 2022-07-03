@@ -1,29 +1,16 @@
 import BigNumber from "bignumber.js";
 import { atom, selector } from "recoil";
-import {
-  AllAsset,
-  AllAssetExtended,
-  Asset,
-  AssetERC20Extended,
-  Chain,
-} from "../types/blockchain";
+import { AllAsset, AllAssetExtended, Chain } from "../types/blockchain";
 
 export const assetsListState = atom<AllAsset[]>({
   key: "assetsList",
   default: [
     {
-      chainId: "0x1",
-      address: null,
-      assetType: "native",
-      symbol: "ETH",
-      name: "Ethereum",
-    },
-    {
-      chainId: "0x89",
+      chainId: "0x" + (80001).toString(16),
       address: null,
       assetType: "native",
       symbol: "MATIC",
-      name: "Polygon",
+      name: "Polygon Mumbai",
     },
   ],
 });
@@ -32,12 +19,10 @@ export const chainListState = atom<Chain[]>({
   key: "chainList",
   default: [
     {
-      id: "0x1",
-      name: "Ethereum",
-    },
-    {
-      id: "0x89",
-      name: "Polygon",
+      id: "0x" + (80001).toString(16),
+      name: "Polygon Mumbai",
+      rpcs: ["https://matic-mumbai.chainstacklabs.com"],
+      factory: "0x5346cfa6b92133e82303e7d76aaa238337979990",
     },
   ],
 });

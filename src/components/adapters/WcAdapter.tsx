@@ -17,6 +17,7 @@ export default function WcAdapter() {
         console.error(err);
         return;
       }
+      console.log("call_request", payload);
       setPayload(payload);
     });
     return () => {

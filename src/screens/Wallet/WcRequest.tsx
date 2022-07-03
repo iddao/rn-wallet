@@ -50,30 +50,32 @@ export default function WcRequest() {
   };
   return (
     <>
-      <Header title="Connect to Dapp" headerLeft={(<></>) as any} />
+      <Header title="Connect to Dapp" />
       {param ? (
-        <VStack alignItems="center">
-          <Text>Do you want to connect to DApp?</Text>
-          {param.peerMeta && (
-            <>
-              <Avatar
-                source={{
-                  uri: param.peerMeta.icons[0],
-                }}
-                m={2}
-                size="lg"
-              />
-              <Text fontSize="lg">{param.peerMeta.name}</Text>
-              <Text fontSize="sm">{param.peerMeta.url}</Text>
-              <Text m={1}>{param.peerMeta.description}</Text>
-            </>
-          )}
+        <VStack alignItems="center" flexGrow={1}>
+          <VStack alignItems="center" flexGrow={1} justifyContent="center">
+            <Text>Do you want to connect to DApp?</Text>
+            {param.peerMeta && (
+              <>
+                <Avatar
+                  source={{
+                    uri: param.peerMeta.icons[0],
+                  }}
+                  m={2}
+                  size="lg"
+                />
+                <Text fontSize="lg">{param.peerMeta.name}</Text>
+                <Text fontSize="sm">{param.peerMeta.url}</Text>
+                <Text m={1}>{param.peerMeta.description}</Text>
+              </>
+            )}
+          </VStack>
           <HStack space={1} alignItems="center" m={2}>
-            <Button onPress={approve} colorScheme="primary">
-              <Text>Approve</Text>
+            <Button onPress={approve} colorScheme="primary" flex={1}>
+              Approve
             </Button>
-            <Button onPress={reject} colorScheme="secondary">
-              <Text>Reject</Text>
+            <Button onPress={reject} colorScheme="secondary" flex={1}>
+              Reject
             </Button>
           </HStack>
         </VStack>
